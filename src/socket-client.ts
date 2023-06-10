@@ -1,8 +1,12 @@
 import { Manager, Socket } from 'socket.io-client'
 
-export const connectToServer = () => {
+export const connectToServer = (token: string) => {
   const url = 'http://localhost:3001/socket.io/socket.io.js'
-  const manager = new Manager(url)
+  const manager = new Manager(url, {
+    extraHeaders: {
+      authorization: token
+    }
+  })
   // el / representa el namespace, este caso el root
   const socket = manager.socket('/')
   serverStatus(socket)
