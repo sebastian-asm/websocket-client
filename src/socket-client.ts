@@ -1,5 +1,9 @@
 import { Manager, Socket } from 'socket.io-client'
 
+// se mantiene de manera global para evitar problemas de mutiples liesteners
+// esto mantendria un unico contexto del socket
+let socket: Socket
+
 export const connectToServer = (token: string) => {
   const url = 'http://localhost:3001/socket.io/socket.io.js'
   const manager = new Manager(url, {
@@ -7,12 +11,14 @@ export const connectToServer = (token: string) => {
       authorization: token
     }
   })
+  // evitar problemas de mutiples listener del socket
+  socket?.removeAllListeners()
   // el / representa el namespace, este caso el root
-  const socket = manager.socket('/')
-  serverStatus(socket)
+  socket = manager.socket('/')
+  addListeners()
 }
 
-const serverStatus = (socket: Socket) => {
+const addListeners = () => {
   // ! indica que es un elemento que siempre va a existir
   const status = document.querySelector('#server-status')!
   const clientsList = document.querySelector('#clients-connected')!
