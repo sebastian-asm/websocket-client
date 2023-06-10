@@ -5,7 +5,7 @@ import { Manager, Socket } from 'socket.io-client'
 let socket: Socket
 
 export const connectToServer = (token: string) => {
-  const url = 'http://localhost:3001/socket.io/socket.io.js'
+  const url = `${import.meta.env.VITE_URL_SOCKET}/socket.io/socket.io.js`
   const manager = new Manager(url, {
     extraHeaders: {
       authorization: token
